@@ -1,14 +1,25 @@
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import type { PledgeCardRadioProps } from "./types";
 
 const PledgeCardRadio = (props: PledgeCardRadioProps) => {
     const { title, description, amountCash, amountLeft, checked, onClick, onPledge, disabled } = { ...props }
     const freePledge = amountCash === 0 && amountLeft === 0;
     const [pledge, setPledge] = useState<number>(amountCash);
+    const [error, setError] = useState<boolean>(false);
+
+    const handleCheckPledge = (pledge: number) => {
+        if(!pledge || pledge < amountCash)
+            return false;
+        return true;
+    }
 
     const handlePledgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newPledge = parseInt(e.target.value);
         setPledge(newPledge);
+        if(handleCheckPledge(newPledge))
+            setError(false);
+        else
+            setError(true);
     }
 
     return (
@@ -65,16 +76,19 @@ const PledgeCardRadio = (props: PledgeCardRadioProps) => {
                             type="number"
                             value={pledge}
                             onChange={handlePledgeChange}
-                            className="h-full pl-10 border-2 border-gray-200 rounded-full p-3 w-[100px] outline-gray-300 outline-offset-2 font-[700] focus:outline-2"
+                            className={`h-full pl-10 border-2 ${error ? 'border-red-200 outline-red-300' : 'border-gray-200 outline-gray-300'} rounded-full p-3 w-[100px] outline-offset-2 font-[700] focus:outline-2`}
                         />
                         <span className="absolute left-[24px] top-1/2 transform -translate-y-1/2 text-gray-200 font-[700]">$</span>
                     </div>
                     <button
                         type="button"
                         title="Continue"
-                        disabled={disabled}
-                        onClick={onPledge}
-                        className={`text-white font-[700] rounded-full w-fit py-3 px-6 md:py-4 md:px-8 ${disabled ? 'bg-gray-500/40 hover:cursor-default' : 'bg-green-400 hover:cursor-pointer hover:bg-green-700'}`}
+                        disabled={disabled || error}
+                        onClick={() => {
+                            if(!error)
+                                onPledge(pledge);
+                        }}
+                        className="text-white font-[700] rounded-full w-fit py-3 px-6 bg-green-400 md:py-4 md:px-8 disabled:bg-gray-500/40 disabled:hover:cursor-default hover:cursor-pointer hover:bg-green-700"
                     >
                         Continue
                     </button>

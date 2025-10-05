@@ -9,7 +9,7 @@ interface PledgeCardProps {
 
 interface PledgeCardRadioProps extends PledgeCardProps {
     checked?: boolean,
-    onPledge: () => void,
+    onPledge: (amount: number) => void,
 }
 
 export type { PledgeCardProps, PledgeCardRadioProps }

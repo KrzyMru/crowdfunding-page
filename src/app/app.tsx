@@ -3,17 +3,28 @@ import HamburgerIcon from "./assets/icons/icon-hamburger.svg";
 import CloseMenuIcon from "./assets/icons/icon-close-menu.svg";
 import { useState } from "react";
 import PledgeCard from "./components/pledge-card/pledge-card";
-import BackProject from "./components/back-project/back-project";
+import BackProject from "./components/dialogs/back-project/back-project";
+import { useDispatch, useSelector } from "react-redux";
+import { cashSelector } from "./redux/slices/cashSlice";
+import { backersSelector } from "./redux/slices/backersSlice";
+import { amountMahoganySelector } from "./redux/slices/amountMahoganySlice";
+import { amountBlackSelector } from "./redux/slices/amountBlackSlice";
+import { amountStandardSelector } from "./redux/slices/amountStandardSlice";
+import ThankYou from "./components/dialogs/thank-you/thank-you";
+import { changeBackProjectOption } from "./redux/slices/backProjectOptionSlice";
 
 const App = () => {
   const [bookmarked, setBookmarked] = useState<boolean>(false);
-  const [cash, setCash] = useState<number>(89914);
-  const [backers, setBackers] = useState<number>(5007);
-  const [amountStandard, setAmountStandard] = useState<number>(101);
-  const [amountBlack, setAmountBlack] = useState<number>(64);
-  const [amountMahogany, setAmountMahogany] = useState<number>(0);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [backProjectOpen, setbackProjectOpen] = useState<boolean>(false);
+  const [thankYouOpen, setThankYouOpen] = useState<boolean>(false);
+
+  const cash = useSelector(cashSelector);
+  const backers = useSelector(backersSelector);
+  const amountStandard = useSelector(amountStandardSelector);
+  const amountBlack = useSelector(amountBlackSelector);
+  const amountMahogany = useSelector(amountMahoganySelector);
+  const dispatch = useDispatch();
 
   return (
     <main className="h-[100dvh] pt-8 pb-32 flex flex-col overflow-auto bg-gray-50 bg-no-repeat bg-contain bg-local bg-[url(/src/app/assets/images/image-hero-mobile.jpg)] md:bg-[url(/src/app/assets/images/image-hero-desktop.jpg)]">
@@ -56,7 +67,10 @@ const App = () => {
           <button
             type="button"
             title="Back this project"
-            onClick={() => setbackProjectOpen(true)}
+            onClick={() => {
+              dispatch(changeBackProjectOption(null));
+              setbackProjectOpen(true);
+            }}
             className="bg-green-400 text-white font-[700] rounded-full py-3 px-10 hover:cursor-pointer hover:bg-green-700"
           >
             Back this project
@@ -100,7 +114,7 @@ const App = () => {
           </div>
         </div>
         <div className="bg-gray-100 rounded-full mt-8 h-[12px] md:h-[16px]">
-          <div className="bg-green-400 h-full rounded-full" style={{ width: `${cash/100000*100}%` }} />
+          <div className="bg-green-400 h-full rounded-full" style={{ width: `${Math.min(cash/100000*100, 100)}%` }} />
         </div>
       </div>
       {/* Product description */}
@@ -120,7 +134,10 @@ const App = () => {
           description="You get an ergonomic stand made of natural bamboo. You've helped us launch our promotional campaign, and you'll be added to a special Backer member list."
           amountCash={25}
           amountLeft={amountStandard}
-          onClick={() => null}
+          onClick={() => {
+            dispatch(changeBackProjectOption('standard'));
+            setbackProjectOpen(true);
+          }}
           disabled={amountStandard === 0}
         />
         <PledgeCard 
@@ -128,7 +145,10 @@ const App = () => {
           description="You get a Black Special Edition computer stand and a personal thank you. You'll be added to our Backer member list. Shipping is included."
           amountCash={75}
           amountLeft={amountBlack}
-          onClick={() => null}
+          onClick={() => {
+            dispatch(changeBackProjectOption('black'));
+            setbackProjectOpen(true);
+          }}
           disabled={amountBlack === 0}
         />
         <PledgeCard 
@@ -136,7 +156,10 @@ const App = () => {
           description="You get two Special Edition Mahogany stands, a Backer T-Shirt, and a personal thank you. You'll be added to our Backer member list. Shipping is included."
           amountCash={200}
           amountLeft={amountMahogany}
-          onClick={() => null}
+          onClick={() => {
+            dispatch(changeBackProjectOption('mahogany'));
+            setbackProjectOpen(true);
+          }}
           disabled={amountMahogany === 0}
         />
       </div>
@@ -144,6 +167,11 @@ const App = () => {
       <BackProject
         isOpen={backProjectOpen}
         onClose={() => setbackProjectOpen(false)}
+        onPledge={() => setThankYouOpen(true)}
+      />
+      <ThankYou
+        isOpen={thankYouOpen}
+        onClose={() => setThankYouOpen(false)}
       />
     </main>
   )
