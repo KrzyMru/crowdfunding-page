@@ -27,11 +27,12 @@ const App = () => {
   const dispatch = useDispatch();
 
   return (
-    <main className="h-[100dvh] pt-8 pb-32 flex flex-col overflow-auto bg-gray-50 bg-no-repeat bg-contain bg-local bg-[url(/src/app/assets/images/image-hero-mobile.jpg)] md:bg-[url(/src/app/assets/images/image-hero-desktop.jpg)]">
+    <main className={`h-[100dvh] pt-4 pb-32 flex flex-col ${menuOpen ? 'overflow-hidden' : 'overflow-auto'} bg-gray-50 bg-no-repeat bg-contain bg-local bg-[url(/src/app/assets/images/image-hero-mobile.jpg)] md:bg-[url(/src/app/assets/images/image-hero-desktop.jpg)] md:pt-8`}>
       {/* Navigation bar */}
-      <header className="flex items-center justify-between px-8 md:px-42">
+      <div className={`${menuOpen ? 'block' : 'hidden'} fixed inset-0 z-50 bg-black/40 w-full`} />
+      <header className={`${menuOpen ? 'z-51' : ''} flex relative items-center justify-between px-8 md:px-42`}>
         <span className="text-white text-[28px] font-[700]">crowdfund</span>
-        <ul className={`flex gap-[32px] hidden md:flex`}>
+        <ul className={`flex gap-[32px] hidden ${menuOpen ? '' : 'md:flex'}`}>
           <li key={"about"}>
             <a href="/" className="text-white decoration-gray-200 hover:underline">About</a>
           </li>
@@ -45,17 +46,28 @@ const App = () => {
         <button
           type="button"
           title="Menu"
-          className="hover:cursor-pointer md:hidden"
-          onClick={() => setMenuOpen(true)}
+          className={`hover:cursor-pointer ${menuOpen ? '' : 'md:hidden'}`} // Fallback if menu is left open when screen size changes
+          onClick={() => setMenuOpen(!menuOpen)}
         >
           <img 
             src={menuOpen ? CloseMenuIcon : HamburgerIcon}
             alt="Menu"
           />
         </button>
+        <ul className={`${menuOpen ? 'flex' : 'hidden'} absolute top-18 left-8 right-8 flex-col bg-white rounded-xl overflow-hidden`}>
+          <li key={"about"} className="relative">
+            <a href="/" className="block text-[18px] font-[500] p-6 hover:bg-gray-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:mt-6 after:h-[1px] after:bg-gray-200">About</a>
+          </li>
+          <li key={"discover"} className="relative">
+            <a href="/" className="block text-[18px] font-[500] p-6 hover:bg-gray-100 after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:mt-6 after:h-[1px] after:bg-gray-200">Discover</a>
+          </li>
+          <li key={"getStarted"}>
+            <a href="/" className="block text-[18px] font-[500] p-6 hover:bg-gray-100">Get Started</a>
+          </li>
+        </ul>
       </header>
       {/* Product introduction */}
-      <div className="mt-42 mx-8 pt-12 pb-8 px-6 bg-white rounded-lg border-1 border-gray-200 relative md:mt-60 md:mx-auto md:min-w-[750px] md:p-12">
+      <div inert={menuOpen} className="mt-42 mx-8 pt-12 pb-8 px-6 bg-white rounded-lg border-1 border-gray-200 relative md:mt-60 md:mx-auto md:min-w-[750px] md:p-12">
         <img 
           src={LogoMastercraft}
           alt="mastercraft"
@@ -96,7 +108,7 @@ const App = () => {
         </div>
       </div>
       {/* Product backers and cash */}
-      <div className="mt-8 mx-8 px-6 py-8 bg-white rounded-lg border-1 border-gray-200 md:min-w-[750px] md:mx-auto md:p-12">
+      <div inert={menuOpen} className="mt-8 mx-8 px-6 py-8 bg-white rounded-lg border-1 border-gray-200 md:min-w-[750px] md:mx-auto md:p-12">
         <div className="flex flex-col md:flex-row">
           <div className="flex flex-col min-w-[150px] items-center md:items-start">
             <span className="text-[24px] font-[700] md:text-[32px]">${cash.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
@@ -118,7 +130,7 @@ const App = () => {
         </div>
       </div>
       {/* Product description */}
-      <div className="mt-8 mx-8 px-6 py-8 bg-white rounded-lg border-1 border-gray-200 flex flex-col gap-8 md:mx-auto md:p-12 md:max-w-[750px]">
+      <div inert={menuOpen} className="mt-8 mx-8 px-6 py-8 bg-white rounded-lg border-1 border-gray-200 flex flex-col gap-8 md:mx-auto md:p-12 md:max-w-[750px]">
         <span className="text-[20px] font-[700]">About this project</span>
         <p className="text-gray-500 text-[14px]/6 md:text-[16px]/7">
           The Mastercraft Bamboo Monitor Riser is a sturdy and stylish platform that elevates your screen 
