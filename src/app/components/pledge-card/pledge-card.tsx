@@ -1,7 +1,7 @@
 import type { PledgeCardProps } from "./types";
 
 const PledgeCard = (props: PledgeCardProps) => {
-    const { title, description, amountCash, amountLeft, disabled } = { ...props }
+    const { title, description, amountCash, amountLeft, onClick, disabled } = { ...props }
 
     return (
         <div className={`${disabled ? 'border-gray-100/40' : 'border-gray-100'} border-2 rounded-xl flex flex-col gap-6 p-8`}>
@@ -19,6 +19,7 @@ const PledgeCard = (props: PledgeCardProps) => {
                     type="button"
                     title="Select reward"
                     disabled={disabled}
+                    onClick={onClick}
                     className={`text-white font-[700] rounded-full w-fit py-4 px-8 ${disabled ? 'bg-gray-500/40 hover:cursor-default' : 'bg-green-400 hover:cursor-pointer hover:bg-green-700'}`}
                 >
                     {disabled ? 'Out of stock' : 'Select Reward'}

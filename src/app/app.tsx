@@ -3,6 +3,7 @@ import HamburgerIcon from "./assets/icons/icon-hamburger.svg";
 import CloseMenuIcon from "./assets/icons/icon-close-menu.svg";
 import { useState } from "react";
 import PledgeCard from "./components/pledge-card/pledge-card";
+import BackProject from "./components/back-project/back-project";
 
 const App = () => {
   const [bookmarked, setBookmarked] = useState<boolean>(false);
@@ -12,6 +13,7 @@ const App = () => {
   const [amountBlack, setAmountBlack] = useState<number>(64);
   const [amountMahogany, setAmountMahogany] = useState<number>(0);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [backProjectOpen, setbackProjectOpen] = useState<boolean>(false);
 
   return (
     <main className="h-[100dvh] pt-8 pb-32 flex flex-col overflow-auto bg-gray-50 bg-no-repeat bg-contain bg-local bg-[url(/src/app/assets/images/image-hero-mobile.jpg)] md:bg-[url(/src/app/assets/images/image-hero-desktop.jpg)]">
@@ -20,13 +22,13 @@ const App = () => {
         <span className="text-white text-[28px] font-[700]">crowdfund</span>
         <ul className={`flex gap-[32px] hidden md:flex`}>
           <li key={"about"}>
-            <a href="/" className="text-white hover:underline">About</a>
+            <a href="/" className="text-white decoration-gray-200 hover:underline">About</a>
           </li>
           <li key={"discover"}>
-            <a href="/" className="text-white hover:underline">Discover</a>
+            <a href="/" className="text-white decoration-gray-200 hover:underline">Discover</a>
           </li>
           <li key={"getStarted"}>
-            <a href="/" className="text-white hover:underline">Get Started</a>
+            <a href="/" className="text-white decoration-gray-200 hover:underline">Get Started</a>
           </li>
         </ul>
         <button
@@ -53,6 +55,8 @@ const App = () => {
         <div className="flex justify-center gap-2 mt-8 md:mt-10 md:justify-between">
           <button
             type="button"
+            title="Back this project"
+            onClick={() => setbackProjectOpen(true)}
             className="bg-green-400 text-white font-[700] rounded-full py-3 px-10 hover:cursor-pointer hover:bg-green-700"
           >
             Back this project
@@ -116,6 +120,7 @@ const App = () => {
           description="You get an ergonomic stand made of natural bamboo. You've helped us launch our promotional campaign, and you'll be added to a special Backer member list."
           amountCash={25}
           amountLeft={amountStandard}
+          onClick={() => null}
           disabled={amountStandard === 0}
         />
         <PledgeCard 
@@ -123,6 +128,7 @@ const App = () => {
           description="You get a Black Special Edition computer stand and a personal thank you. You'll be added to our Backer member list. Shipping is included."
           amountCash={75}
           amountLeft={amountBlack}
+          onClick={() => null}
           disabled={amountBlack === 0}
         />
         <PledgeCard 
@@ -130,9 +136,15 @@ const App = () => {
           description="You get two Special Edition Mahogany stands, a Backer T-Shirt, and a personal thank you. You'll be added to our Backer member list. Shipping is included."
           amountCash={200}
           amountLeft={amountMahogany}
+          onClick={() => null}
           disabled={amountMahogany === 0}
         />
       </div>
+      {/* Modals */}
+      <BackProject
+        isOpen={backProjectOpen}
+        onClose={() => setbackProjectOpen(false)}
+      />
     </main>
   )
 }

@@ -3,7 +3,13 @@ interface PledgeCardProps {
     description: string,
     amountCash: number,
     amountLeft: number,
+    onClick: () => void,
     disabled?: boolean, 
 }
 
-export type { PledgeCardProps }
+interface PledgeCardRadioProps extends PledgeCardProps {
+    checked?: boolean,
+    onPledge: () => void,
+}
+
+export type { PledgeCardProps, PledgeCardRadioProps }
